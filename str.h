@@ -19,6 +19,4 @@ struct str {
 	size_t cap;
 };
 
-struct str *str_alloc(struct arena *a, size_t initial_capacity);
-
 #endif

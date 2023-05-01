@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 struct arena {
-  char *buffer;
-  size_t count;
-  size_t capacity;
+	char *buffer;
+	size_t count;
+	size_t capacity;
 };
 
 /**
@@ -22,14 +22,14 @@ struct arena {
  */
 struct arena *arena_create(size_t max_size)
 {
-  //For now just use malloc
-  struct arena *a = malloc(sizeof(*a) + max_size);
-  if (!a) {
-    a->buffer = ((char*)a) + sizeof(*a);
-    a->count = 0;
-    a->capacity = max_size;
-  }
-  return a;
+	//For now just use malloc
+	struct arena *a = malloc(sizeof(*a) + max_size);
+	if (!a) {
+		a->buffer = ((char*)a) + sizeof(*a);
+		a->count = 0;
+		a->capacity = max_size;
+	}
+	return a;
 }
 
 /**
@@ -39,10 +39,10 @@ struct arena *arena_create(size_t max_size)
  */
 void arena_free(struct arena *a)
 {
-  a->buffer = NULL;
-  a->count = 0;
-  a->capacity = 0;
-  free(a);
+	a->buffer = NULL;
+	a->count = 0;
+	a->capacity = 0;
+	free(a);
 }
 
 /**
@@ -56,12 +56,12 @@ void arena_free(struct arena *a)
  */
 void *arena_alloc(struct arena *a, const size_t size)
 {
-  if ((a->capacity - a->count) > size) { 
-    void *block = (void*)(a->buffer + a->count);
-    a->count += size;
-    return block;
-  }
-  return NULL;
+	if ((a->capacity - a->count) > size) { 
+		void *block = (void*)(a->buffer + a->count);
+		a->count += size;
+		return block;
+	}
+	return NULL;
 }
 
 /**
@@ -71,5 +71,5 @@ void *arena_alloc(struct arena *a, const size_t size)
  */
 void arena_reset(struct arena *a)
 {
-  a->count = 0;
+	a->count = 0;
 }
