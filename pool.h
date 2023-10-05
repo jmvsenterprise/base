@@ -20,8 +20,8 @@
  * the total capacity of the block.
  */
 struct pool {
-	long offset;
-	long cap;
+	unsigned long offset;
+	unsigned long cap;
 	char *buffer;
 };
 
@@ -34,7 +34,7 @@ struct pool {
  * Returns 0 if the pool, p, was successfully initialized to the desired
  * size. Otherwise returns an error code.
  */
-int pool_init(struct pool *p, long desired_size);
+int pool_init(struct pool *p, unsigned long desired_size);
 
 /*
  * Free all memory allocated to the pool.
@@ -56,7 +56,7 @@ void pool_free(struct pool *p);
  * Returns a valid pointer if successful. If the pool has no more memory
  * NULL will be returned.
  */
-void *pool_alloc(struct pool *p, long byte_amount);
+void *pool_alloc(struct pool *p, unsigned long byte_amount);
 
 /*
  * Reset the pool to a specific offset, reclaiming memory.
@@ -73,7 +73,7 @@ void *pool_alloc(struct pool *p, long byte_amount);
  * p - The pool to reset.
  * offset - The offset to set the pool to.
  */
-void pool_reset(struct pool *p, long offset);
+void pool_reset(struct pool *p, unsigned long offset);
 
 /*
  * Helper macro to allocate memory for a specific type of object.
@@ -106,13 +106,14 @@ void pool_reset(struct pool *p, long offset);
 
 #include <assert.h>
 #include <errno.h>
+#include <stdlib.h>
 
-int pool_init(struct pool *p, long desired_size)
+int pool_init(struct pool *p, unsigned long desired_size)
 {
 	assert(p && (p->buffer == NULL));
 	p->offset = 0;
 	p->cap = desired_size;
-	p->buffer = malloc(p->cap);
+	p->buffer = malloc((size_t)p->cap);
 
 	if (!p->buffer) {
 		return errno;
@@ -129,9 +130,9 @@ void pool_free(struct pool *p)
 	p->offset = p->cap = 0;
 }
 
-void *pool_alloc(struct pool *p, long byte_amount)
+void *pool_alloc(struct pool *p, unsigned long byte_amount)
 {
-	long alignment = sizeof(void*) - byte_amount % sizeof(void*);
+	unsigned long alignment = sizeof(void*) - byte_amount % sizeof(void*);
 	byte_amount += alignment;
 	if ((p->offset + byte_amount) > p->cap) {
 		return NULL;
