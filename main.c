@@ -4,6 +4,7 @@
  */
 #define DEFINE_POOL
 #include "pool.h"
+#define DEFINE_STR
 #include "str.h"
 
 int main()
